@@ -39,16 +39,14 @@ func ValidateCustom(request interface{}, arrToValidate []string) error {
 	var errString string
 	validate := validator.New()
 
-	for _, key := range arrToValidate {
-		err := validate.StructPartial(request, key)
-		if err != nil {
-			es := err.(validator.ValidationErrors)
-			for _, errVali := range es {
-				errString = errVali.Field() + " is " + errVali.Tag()
-				break
-			}
-			return errors.New(errString)
+	err := validate.StructPartial(request, arrToValidate...)
+	if err != nil {
+		es := err.(validator.ValidationErrors)
+		for _, errVali := range es {
+			errString = errVali.Field() + " is " + errVali.Tag()
+			break
 		}
+		return errors.New(errString)
 	}
 
 	return nil
