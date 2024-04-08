@@ -35,11 +35,12 @@ func ValidateReq(request interface{}) error {
 //	}
 //
 // use "Mama" not the json
-// ValidateCustom(request, []string{"Mama"}) -> use like this
-func ValidateCustom(request interface{}, arrToValidate []string) error {
+// ValidateCustom(request, "Mama") -> use like this
+// ValidateCustom(request, "Mama", "Papa") -> and can like this
+func ValidateCustom(request interface{}, fieldToValidate ...string) error {
 	var errString string
 
-	err := validate.StructPartial(request, arrToValidate...)
+	err := validate.StructPartial(request, fieldToValidate...)
 	if err != nil {
 		es := err.(validator.ValidationErrors)
 		for _, errVali := range es {
@@ -53,9 +54,9 @@ func ValidateCustom(request interface{}, arrToValidate []string) error {
 }
 
 // this is the opposite ValidateCustom
-func ValidateCustomExcept(request interface{}, arrToExceptValidate []string) error {
+func ValidateCustomExcept(request interface{}, fieldsToExceptValidate ...string) error {
 	var errString string
-	err := validate.StructExcept(request, arrToExceptValidate...)
+	err := validate.StructExcept(request, fieldsToExceptValidate...)
 	if err != nil {
 		es := err.(validator.ValidationErrors)
 		for _, errVali := range es {
