@@ -4,12 +4,14 @@ import (
 	"errors"
 
 	"github.com/go-playground/validator"
+	myresponses "github.com/ketutkusuma/my-responses"
+	"github.com/labstack/echo/v4"
 )
 
 var validate = validator.New()
 
 // will validate all struct variabel whose has gorm:"validate"
-func ValidateReq(request interface{}) error {
+func ValidateReq(c echo.Context, request interface{}) error {
 	var errString string
 
 	err := validate.Struct(request)
@@ -18,7 +20,7 @@ func ValidateReq(request interface{}) error {
 			errString = errValidation.Field() + " is " + errValidation.Tag()
 			break
 		}
-		return errors.New(errString)
+		return myresponses.HandleError(c, 400, errString)
 	}
 
 	return nil
