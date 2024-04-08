@@ -6,6 +6,7 @@ import (
 	"github.com/go-playground/validator"
 )
 
+// will validate all struct variabel whose has gorm:"validate"
 func ValidateReq(request interface{}) error {
 	var errString string
 	validate := validator.New()
@@ -23,11 +24,22 @@ func ValidateReq(request interface{}) error {
 
 }
 
-func ValidateCustom(request interface{}, arr []string) error {
+// will validate custom from array to validate (string)
+// the string is follow what name variable from your struct
+// ex :
+//
+//	type Mama struct{
+//			Mama string "json:"mama" validate:required"
+//			Papa string "json:"papa" validate:required"
+//	}
+//
+// use "Mama" not the json
+// ValidateCustom(request, []string{"Mama"}) -> use like this
+func ValidateCustom(request interface{}, arrToValidate []string) error {
 	var errString string
 	validate := validator.New()
 
-	for _, key := range arr {
+	for _, key := range arrToValidate {
 		err := validate.StructPartial(request, key)
 		if err != nil {
 			es := err.(validator.ValidationErrors)
