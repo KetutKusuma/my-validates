@@ -3,7 +3,7 @@ package myvalidates
 import (
 	"errors"
 
-	"github.com/go-playground/validator"
+	"github.com/go-playground/validator/v10"
 )
 
 var validate = validator.New()
