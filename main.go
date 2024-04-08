@@ -6,10 +6,11 @@ import (
 	"github.com/go-playground/validator"
 )
 
+var validate = validator.New()
+
 // will validate all struct variabel whose has gorm:"validate"
 func ValidateReq(request interface{}) error {
 	var errString string
-	validate := validator.New()
 
 	err := validate.Struct(request)
 	if err != nil {
@@ -37,7 +38,6 @@ func ValidateReq(request interface{}) error {
 // ValidateCustom(request, []string{"Mama"}) -> use like this
 func ValidateCustom(request interface{}, arrToValidate []string) error {
 	var errString string
-	validate := validator.New()
 
 	err := validate.StructPartial(request, arrToValidate...)
 	if err != nil {
@@ -52,9 +52,9 @@ func ValidateCustom(request interface{}, arrToValidate []string) error {
 	return nil
 }
 
+// this is the opposite ValidateCustom
 func ValidateCustomExcept(request interface{}, arrToExceptValidate []string) error {
 	var errString string
-	validate := validator.New()
 	err := validate.StructExcept(request, arrToExceptValidate...)
 	if err != nil {
 		es := err.(validator.ValidationErrors)
