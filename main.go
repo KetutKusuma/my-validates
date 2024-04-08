@@ -53,3 +53,22 @@ func ValidateCustom(request interface{}, arrToValidate []string) error {
 
 	return nil
 }
+
+func ValidateCustomExcept(request interface{}, arrToExceptValidate []string) error {
+	var errString string
+	validate := validator.New()
+
+	for _, key := range arrToExceptValidate {
+		err := validate.StructExcept(request, key)
+		if err != nil {
+			es := err.(validator.ValidationErrors)
+			for _, errVali := range es {
+				errString = errVali.Field() + " is " + errVali.Tag()
+				break
+			}
+			return errors.New(errString)
+		}
+	}
+
+	return nil
+}
